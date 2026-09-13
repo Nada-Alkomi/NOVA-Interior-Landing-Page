@@ -155,22 +155,22 @@ export default function Navbar() {
             </a>
             ))}
 
-            <a
-            href="#contact"
-            onClick={closeMenu}
-            className="
-                mt-2 flex items-center justify-center gap-2
-                rounded-2xl bg-[#F5A623]
-                px-4 py-3
-                text-sm font-semibold text-[#073F43]
-                transition-all duration-300
-                hover:bg-[#073F43]
-                hover:text-white
-            "
-        >
-            Get Started
-            <ArrowUpRight size={17} />
-            </a>
+           <a
+  href="#contact"
+  onClick={closeMenu}
+  className="
+    mt-2 flex items-center justify-center gap-2
+    rounded-2xl bg-[#F5A623]
+    px-4 py-3
+    text-sm font-semibold text-[#073F43]
+    transition-all duration-300
+    hover:bg-[#ffffff]
+    hover:text-white
+  "
+>
+  Get Started
+  <ArrowUpRight size={17} className="text-current" />
+</a>
         </div>
         </div>
     </header>

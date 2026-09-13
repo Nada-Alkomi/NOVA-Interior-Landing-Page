@@ -1,4 +1,77 @@
+import { useState } from "react";
+import { Phone, MapPin } from "lucide-react";
+
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setSuccess("");
+    setError("");
+
+    if (
+      !formData.name.trim() ||
+      !formData.email.trim() ||
+      !formData.subject.trim() ||
+      !formData.message.trim()
+    ) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        "https://localhost:7109/api/Contact",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Something went wrong. Please try again.");
+      }
+
+      const data = await response.json();
+
+      setSuccess(data.message);
+
+      
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section
       id="contact"
@@ -6,12 +79,11 @@ const Contact = () => {
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-10">
 
-        <div className="grid overflow-hidden rounded-[2rem] bg-[#073F43] lg:grid-cols-2">
+        <div className="grid overflow-hidden rounded-[2rem ] bg-[#073F43] lg:grid-cols-2">
 
-          {/* Left Content */}
+          
           <div className="relative overflow-hidden px-6 py-12 sm:px-10 sm:py-16 lg:px-14 lg:py-20">
 
-            {/* Decorative circles */}
             <div className="absolute -right-20 -top-20 h-52 w-52 rounded-full bg-[#075E63] opacity-40" />
 
             <div className="absolute -bottom-24 -left-20 h-64 w-64 rounded-full bg-[#F5A623] opacity-10" />
@@ -40,7 +112,6 @@ const Contact = () => {
                 vision to life.
               </p>
 
-              {/* Contact Info */}
               <div className="mt-10 space-y-5">
 
                 <div className="flex items-center gap-4">
@@ -60,9 +131,9 @@ const Contact = () => {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-[#F5A623]">
-                    ☎
-                  </div>
+                 <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-[#F5A623]">
+                 <Phone size={20} />
+                 </div>
 
                   <div>
                     <p className="text-xs text-white/50">
@@ -77,8 +148,8 @@ const Contact = () => {
 
                 <div className="flex items-center gap-4">
                   <div className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-[#F5A623]">
-                    ◉
-                  </div>
+                        <MapPin size={20} />
+                       </div>
 
                   <div>
                     <p className="text-xs text-white/50">
@@ -108,7 +179,7 @@ const Contact = () => {
               </p>
             </div>
 
-            <form className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
 
               {/* Name */}
               <div>
@@ -122,6 +193,8 @@ const Contact = () => {
                 <input
                   id="name"
                   type="text"
+                  value={formData.name}
+                  onChange={handleChange}
                   placeholder="Enter your name"
                   className="w-full rounded-xl border border-[#073F43]/10 bg-[#F7F5F0] px-4 py-3.5 text-sm text-[#243033] outline-none transition focus:border-[#075E63] focus:ring-2 focus:ring-[#075E63]/10"
                 />
@@ -139,42 +212,45 @@ const Contact = () => {
                 <input
                   id="email"
                   type="email"
+                  value={formData.email}
+                  onChange={handleChange}
                   placeholder="you@example.com"
                   className="w-full rounded-xl border border-[#073F43]/10 bg-[#F7F5F0] px-4 py-3.5 text-sm text-[#243033] outline-none transition focus:border-[#075E63] focus:ring-2 focus:ring-[#075E63]/10"
                 />
               </div>
 
-              {/* Project Type */}
+              {/* Subject */}
               <div>
                 <label
-                  htmlFor="project"
+                  htmlFor="subject"
                   className="mb-2 block text-sm font-medium text-[#243033]"
                 >
                   Project Type
                 </label>
 
                 <select
-                  id="project"
+                  id="subject"
+                  value={formData.subject}
+                  onChange={handleChange}
                   className="w-full rounded-xl border border-[#073F43]/10 bg-[#F7F5F0] px-4 py-3.5 text-sm text-[#243033] outline-none transition focus:border-[#075E63] focus:ring-2 focus:ring-[#075E63]/10"
-                  defaultValue=""
                 >
                   <option value="" disabled>
                     Select a project type
                   </option>
 
-                  <option value="interior">
+                  <option value="Interior Design">
                     Interior Design
                   </option>
 
-                  <option value="furniture">
+                  <option value="Furniture">
                     Furniture
                   </option>
 
-                  <option value="decor">
+                  <option value="Home Decor">
                     Home Decor
                   </option>
 
-                  <option value="consultation">
+                  <option value="Design Consultation">
                     Design Consultation
                   </option>
                 </select>
@@ -192,20 +268,39 @@ const Contact = () => {
                 <textarea
                   id="message"
                   rows="4"
+                  value={formData.message}
+                  onChange={handleChange}
                   placeholder="Tell us about your space..."
                   className="w-full resize-none rounded-xl border border-[#073F43]/10 bg-[#F7F5F0] px-4 py-3.5 text-sm text-[#243033] outline-none transition focus:border-[#075E63] focus:ring-2 focus:ring-[#075E63]/10"
                 />
               </div>
 
+              {/* Messages */}
+              {error && (
+                <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-600">
+                  {error}
+                </p>
+              )}
+
+              {success && (
+                <p className="rounded-lg bg-green-50 px-4 py-3 text-sm text-green-600">
+                  {success}
+                </p>
+              )}
+
               {/* Submit */}
               <button
                 type="submit"
-                className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#F5A623] px-6 py-4 text-sm font-semibold text-[#073F43] transition-all duration-300 hover:-translate-y-1 hover:bg-[#075E63] hover:text-white"
+                disabled={loading}
+                className="flex w-full items-center justify-center gap-3 rounded-xl bg-[#F5A623] px-6 py-4 text-sm font-semibold text-[#073F43] transition-all duration-300 hover:-translate-y-1 hover:bg-[#075E63] hover:text-white disabled:cursor-not-allowed disabled:opacity-60"
               >
-                Send Message
-                <span className="text-lg">
-                  ↗
-                </span>
+                {loading ? "Sending..." : "Send Message"}
+
+                {!loading && (
+                  <span className="text-lg">
+                    ↗
+                  </span>
+                )}
               </button>
 
             </form>
