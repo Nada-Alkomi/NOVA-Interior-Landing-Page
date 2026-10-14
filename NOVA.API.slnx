@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="NOVA.API/NOVA.API.csproj" />
+  <Project Path="NOVA.BLL/NOVA.BLL.csproj" Id="5d361236-4191-4de1-a5ed-a51880efe328" />
+  <Project Path="NOVA.DAL/NOVA.DAL.csproj" Id="dd769be5-cd96-431a-95e2-f033d966c200" />
+</Solution>

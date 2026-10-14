@@ -1,3 +1,11 @@
+<<<<<<< HEAD
+.vs/
+**/.vs/
+**/bin/
+**/obj/
+*.user
+*.suo
+=======
 # Logs
 logs
 *.log
@@ -22,3 +30,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+>>>>>>> origin/backend
